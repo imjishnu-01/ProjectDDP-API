@@ -18,7 +18,7 @@ const app = express();
 
 
 app.use(cors({
-    origin: ['projectddp.com','https://projectddp.com/login'], // Replace with the origin you want to allow
+    origin: ['projectddp.com'], // Replace with the origin you want to allow
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Set the allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Set the allowed request headers
     exposedHeaders: ['Content-Length', 'X-Custom-Header'], // Expose additional response headers
