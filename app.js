@@ -16,11 +16,9 @@ const authMiddleware = require('./middleWare/authMiddleware');
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 app.use(cors({
-    origin: ['*'], // Replace with the origin you want to allow
+    origin: ['https://projectddp.com/'], // Replace with the origin you want to allow
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Set the allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Set the allowed request headers
     exposedHeaders: ['Content-Length', 'X-Custom-Header'], // Expose additional response headers
@@ -28,7 +26,8 @@ app.use(cors({
     maxAge: 3600, // Set the maximum age for preflight requests (optional)
   }));
 
-
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use('/api/user', userRoutes);
 app.use('/api/skill', skillRoutes);
