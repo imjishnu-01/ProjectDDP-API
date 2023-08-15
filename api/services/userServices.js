@@ -102,6 +102,7 @@ exports.loginUser = (req, res) => {
     }
 
     if (results.length === 0) {
+      console.log(email, password);
       return res.status(404).json({ error: 'User not found' });
     }
 
