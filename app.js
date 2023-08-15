@@ -16,6 +16,8 @@ const authMiddleware = require('./middleWare/authMiddleware');
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use(cors({
     origin: ['*'], // Replace with the origin you want to allow
@@ -26,8 +28,7 @@ app.use(cors({
     maxAge: 3600, // Set the maximum age for preflight requests (optional)
   }));
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+
 
 app.use('/api/user', userRoutes);
 app.use('/api/skill', skillRoutes);
