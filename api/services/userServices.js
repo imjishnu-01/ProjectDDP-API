@@ -95,7 +95,7 @@ const sendVerificationEmail = (email, verificationToken) => {
 exports.loginUser = (req, res) => {
   const { email, password } = req.body;
   // Check if the email exists in the database
-  pool.query('SELECT * FROM users WHERE email = ?', email, (error, results) => {
+  pool.query('SELECT * FROM users WHERE email = ?', [email], (error, results) => {
     if (error) {
        console.log(error);
       return res.status(500).json({ error: 'Internal Server Error' });
