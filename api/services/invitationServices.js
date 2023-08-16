@@ -206,7 +206,7 @@ exports.updateInvitationStatus = (req, res) => {
           });
           // Send email to receiver (as CC)
           const MailOptions = {
-            from: process.env.EMAIL,
+            from: `${projectName} <${process.env.EMAIL}>`,
             to: senderEmail,
             cc: receiverEmail,
             subject: 'Invitation Accepted',

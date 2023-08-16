@@ -72,7 +72,7 @@ const sendVerificationEmail = (email, verificationToken) => {
   const verificationLink = `${baseURL}/verifyEmail/${verificationToken}`;
   
   const mailOptions = {
-    from: process.env.EMAIL,
+    from: `${projectName} <${process.env.EMAIL}>`,
     to: email,
     subject: 'Account Verification',
     html: `<p>Please click the following link to verify your account: <a href="${verificationLink}">${verificationLink}</a></p>`,
