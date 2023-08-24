@@ -207,12 +207,12 @@ exports.getUserById = (req, res) => {
       SUM(
         CASE
             WHEN yearsOfExperience REGEXP '([0-9]+) yr ([0-9]+) mos' THEN 
-                CAST(REGEXP_SUBSTR(yearsOfExperience, '([0-9]+) yr') AS SIGNED) * 12
-                + CAST(REGEXP_SUBSTR(yearsOfExperience, '([0-9]+) mos') AS SIGNED)
+                CAST(SUBSTRING_INDEX(yearsOfExperience, ' yr ', 1) AS SIGNED) * 12
+                + CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(yearsOfExperience, ' yr ', -1), ' mos', 1) AS SIGNED)
             WHEN yearsOfExperience REGEXP '([0-9]+) yr' THEN
-                CAST(REGEXP_SUBSTR(yearsOfExperience, '([0-9]+) yr') AS SIGNED) * 12
+                CAST(SUBSTRING_INDEX(yearsOfExperience, ' yr ', 1) AS SIGNED) * 12
             WHEN yearsOfExperience REGEXP '([0-9]+) mos' THEN
-                CAST(REGEXP_SUBSTR(yearsOfExperience, '([0-9]+) mos') AS SIGNED)
+                CAST(SUBSTRING_INDEX(yearsOfExperience, ' mos', 1) AS SIGNED)
             ELSE 0
         END
     ) AS total_months_of_experience,
