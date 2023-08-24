@@ -204,7 +204,18 @@ exports.getUserById = (req, res) => {
       u.created,
       u.city,
       u.state,
-      SUM(we.yearsOfExperience) AS total_years_of_experience,
+      SUM(
+        CASE
+            WHEN yearsOfExperience REGEXP '([0-9]+) yr ([0-9]+) mos' THEN 
+                CAST(REGEXP_SUBSTR(yearsOfExperience, '([0-9]+) yr') AS SIGNED) * 12
+                + CAST(REGEXP_SUBSTR(yearsOfExperience, '([0-9]+) mos') AS SIGNED)
+            WHEN yearsOfExperience REGEXP '([0-9]+) yr' THEN
+                CAST(REGEXP_SUBSTR(yearsOfExperience, '([0-9]+) yr') AS SIGNED) * 12
+            WHEN yearsOfExperience REGEXP '([0-9]+) mos' THEN
+                CAST(REGEXP_SUBSTR(yearsOfExperience, '([0-9]+) mos') AS SIGNED)
+            ELSE 0
+        END
+    ) AS total_months_of_experience,
       (
         SELECT GROUP_CONCAT(DISTINCT skill_name, '|',id) 
         FROM skills 
