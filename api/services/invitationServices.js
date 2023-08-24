@@ -210,7 +210,11 @@ exports.updateInvitationStatus = (req, res) => {
             to: senderEmail,
             cc: receiverEmail,
             subject: 'Invitation Accepted',
-            text: `Invitation to ${receiverFirstName} ${receiverLastName} has been accepted. Company: ${company_name}, Role: ${role}.`
+            text: `Invitation to ${receiverFirstName} ${receiverLastName} has been accepted. Company: ${company_name}, Role: ${role}.
+            
+            ${receiverFirstName} is included in the CC list of this email. In order to advance with the referral process and establish contact, please respond to all recipients of this email
+
+            `
           };
 
           transporter.sendMail(MailOptions, (error, info) => {
