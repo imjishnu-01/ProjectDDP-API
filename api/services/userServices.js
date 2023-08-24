@@ -216,7 +216,7 @@ exports.getUserById = (req, res) => {
         WHERE user_id = u.id
       ) AS user_companies,
       (
-        SELECT GROUP_CONCAT(DISTINCT CONCAT(company_name, ' (', yearsOfExperience, ' Years)'), '|', id, '||', position)
+        SELECT GROUP_CONCAT(DISTINCT CONCAT(company_name, ' (', yearsOfExperience, ')'), '|', id, '||', position)
         FROM work_experience 
         WHERE user_id = u.id
       ) AS user_companies_with_experience
