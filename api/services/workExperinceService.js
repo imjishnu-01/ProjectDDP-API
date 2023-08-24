@@ -1,29 +1,32 @@
 const pool = require('../../dbConfig');
 
-exports.addWorkExperience = (req, res) => {
+
+  exports.addWorkExperience = (req, res) => {
     const { userId } = req.params;
     const { company_name, position, start_date, end_date } = req.body;
-    //Date operations for start and end date.
 
-    // Convert the start_date and end_date to the "YYYY-MM-DD" format
-    const startDate = new Date(start_date).toISOString().slice(0, 10);
-    const endDate = end_date ? new Date(end_date).toISOString().slice(0, 10) : null;
-    // Calculate the number of years of experience
-    const yearDiff = endDate ? new Date(end_date).getFullYear() - new Date(start_date).getFullYear() : 0;
-    const monthDiff = endDate ? new Date(end_date).getMonth() - new Date(start_date).getMonth() : 0;
-    const yearsOfExperience = yearDiff + (monthDiff >= 0 ? 0 : -1);
-    // Insert the work experience into the database and associate it with the user using the provided userId
+    const startDate = new Date(start_date);
+    const endDate = end_date ? new Date(end_date) : new Date();
+
+    // Calculate the difference in days
+    const dayDifference = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+    // Calculate the years of experience based on the total days
+    const yearsOfExperience = dayDifference / 365;
+
+    // Insert the work experience into the database
     const sql =
-      'INSERT INTO work_experience (company_name, position, start_date, end_date, yearsOfExperience, user_id) VALUES (?, ?, ?, ?, ?,?)';
-    pool.query(sql, [company_name, position, startDate, endDate, yearsOfExperience, userId], (error, result) => {
+      'INSERT INTO work_experience (company_name, position, start_date, end_date, yearsOfExperience, user_id) VALUES (?, ?, ?, ?, ?, ?)';
+    pool.query(sql, [company_name, position, startDate, end_date ? endDate : null, yearsOfExperience, userId], (error, result) => {
       if (error) {
         console.log(error);
         return res.status(500).json({ error: 'Error adding work experience' });
       }
-  
+
       return res.status(201).json({ message: 'Work experience added successfully' });
     });
-  };
+};
+
 
   exports.getAllWorkExperiences = (req, res) => {
     const { userId } = req.params;
@@ -36,7 +39,9 @@ exports.addWorkExperience = (req, res) => {
       }
       return res.status(200).json(results);
     });
-  };
+  }; 
+
+  
 
   // Update work experience for a user
 exports.updateWorkExperience = (req, res) => {
