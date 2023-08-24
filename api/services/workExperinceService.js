@@ -8,25 +8,46 @@ const pool = require('../../dbConfig');
     const startDate = new Date(start_date);
     const endDate = end_date ? new Date(end_date) : new Date();
 
-    // Calculate the difference in days
-    const dayDifference = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
+    // Calculate the difference in years and the decimal portion
+    const yearDiff = endDate.getFullYear() - startDate.getFullYear();
+    const monthDiff = endDate.getMonth() - startDate.getMonth();
 
-    // Calculate the years of experience based on the total days
-    const yearsOfExperience = dayDifference / 365;
+    let yearsOfExperience = '';
+
+    if (yearDiff > 0) {
+        yearsOfExperience += `${yearDiff} yr`;
+    }
+
+    if (monthDiff > 0) {
+        if (yearsOfExperience !== '') {
+            yearsOfExperience += ' ';
+        }
+        yearsOfExperience += `${monthDiff} mo`;
+    }
 
     // Insert the work experience into the database
     const sql =
-      'INSERT INTO work_experience (company_name, position, start_date, end_date, yearsOfExperience, user_id) VALUES (?, ?, ?, ?, ?, ?)';
-    pool.query(sql, [company_name, position, startDate, end_date ? endDate : null, yearsOfExperience, userId], (error, result) => {
-      if (error) {
-        console.log(error);
-        return res.status(500).json({ error: 'Error adding work experience' });
-      }
+        'INSERT INTO work_experience (company_name, position, start_date, end_date, yearsOfExperience, user_id) VALUES (?, ?, ?, ?, ?, ?)';
+    pool.query(
+        sql,
+        [
+            company_name,
+            position,
+            startDate,
+            end_date ? endDate : null,
+            yearsOfExperience,
+            userId,
+        ],
+        (error, result) => {
+            if (error) {
+                console.log(error);
+                return res.status(500).json({ error: 'Error adding work experience' });
+            }
 
-      return res.status(201).json({ message: 'Work experience added successfully' });
-    });
+            return res.status(201).json({ message: 'Work experience added successfully' });
+        }
+    );
 };
-
 
   exports.getAllWorkExperiences = (req, res) => {
     const { userId } = req.params;
